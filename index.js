@@ -31,7 +31,7 @@ const start = () => {
         {command: 'start', description: 'Начальное приветствие'},
         {command: 'info', description: 'Информация, что делает бот'},
         {command: 'game', description: 'Отгадай число'},
-        {command: 'findNumber', description: 'Угадаю число за 10 вопросов'}
+        {command: 'findNumber', description: 'Угадаю число за 10 вопросов'},
     ])
 
     
@@ -55,6 +55,14 @@ const start = () => {
             
 
         }
+        if (text === '/info') {
+            return bot.sendMessage(chatId, `
+            Я умею:
+            - 🎯 /game — Я загадаю число от 0 до 9, попробуй угадать!
+            - 🧠 /findNumber — Ты загадай число от 1 до 1000, я попробую угадать.
+            `);
+        }
+
     })
 }
 bot.on('callback_query', async msg => {
