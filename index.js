@@ -28,11 +28,12 @@ const startGame = async (chatId) =>{
 
 const start = () => {
     bot.setMyCommands([
-        {command: 'start', description: 'Начальное приветствие'},
-        {command: 'info', description: 'Информация, что делает бот'},
-        {command: 'game', description: 'Отгадай число'},
-        {command: 'findNumber', description: 'Угадаю число за 10 вопросов'},
+        {command: '/start', description: 'Начальное приветствие'},
+        {command: '/info', description: 'Информация, что делает бот'},
+        {command: '/game', description: 'Отгадай число'},
+        {command: '/findnumber', description: 'Угадаю число за 10 вопросов'}
     ])
+
 
     
     bot.on('message' , async msg => {
@@ -45,7 +46,7 @@ const start = () => {
         if(text === '/game'){
             return startGame(chatId);
         }
-        if(text === '/findNumber'){
+        if(text === '/findnumber'){
             numFind[chatId] = {l: 1 , r : 1000};
             const mid  = Math.floor((1 + 1000) / 2);
             await bot.sendMessage(chatId , 'Я буду загодать ваше число за 10 попыток выбери число от 1 до 1000');
