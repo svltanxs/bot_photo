@@ -28,13 +28,12 @@ const startGame = async (chatId) =>{
 
 const start = () => {
     bot.setMyCommands([
-        {command:'/start', description :'Начальное приветьстствие '  },
-        {command:'/info', description :'Информация что делаеть бот' },
-        {command:'/game', description :'Отгадай число' },
-        {command:'/findNumber', description :'Угадаю число за 10 вопросов' },
-
-    
+        {command: 'start', description: 'Начальное приветствие'},
+        {command: 'info', description: 'Информация, что делает бот'},
+        {command: 'game', description: 'Отгадай число'},
+        {command: 'findNumber', description: 'Угадаю число за 10 вопросов'}
     ])
+
     
     bot.on('message' , async msg => {
         const text = msg.text;
