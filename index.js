@@ -4,9 +4,10 @@ const token = '7597104065:AAGNUru4VQ1ASJnBeK-g3ryNXBRep1TKioA'
 
 const bot = new Telegram_Api(token, {polling: true})
 
-const {gameOptions, againOptions} = require('./options') 
+const {gameOptions, againOptions , guessOptions} = require('./options') 
 
 const chats = {}
+const numFind = {}
 
 
 const express = require('express');
@@ -43,20 +44,62 @@ const start = () => {
         if(text === '/game'){
             return startGame(chatId);
         }
+        if(text === '/findNumber'){
+            numFind[chatId] = {l: 1 , r : 1000};
+            const mid  = Math.floor((1 + 1000) / 2);
+            await bot.sendMessage(chatId , 'Я буду загодать ваше число за 10 попыток выбери число от 1 до 1000');
+            numFind[chatId].mid = mid;
+            return bot.sendMessage(chatId , `Это ${mid}`, guessOptions);
+
+            
+
+        }
     })
 }
-bot.on('callback_query' , msg => {
+bot.on('callback_query', async msg => {
     const data = msg.data;
     const chatId = msg.message.chat.id;
-    if(data === '/again'){
+
+    // --- Игра: пользователь угадывает число ---
+    if (data === '/again') {
         return startGame(chatId);
     }
-    if(data == chats[chatId]){
-        return bot.sendMessage(chatId , `Ты угадал это число ${chats[chatId]}`, againOptions);
+
+    if (chats[chatId] !== undefined) {
+        const correct = chats[chatId];
+        if (data == correct) {
+            delete chats[chatId];
+            return bot.sendMessage(chatId, `Ты угадал! Это число: ${correct}`, againOptions);
+        } else {
+            delete chats[chatId];
+            return bot.sendMessage(chatId, `ЛОХ, это было число: ${correct}`, againOptions);
+        }
     }
-    else return bot.sendMessage(chatId , `ЛОх это было числ ${chats[chatId]}` , againOptions);
-    
-    
-})
+
+    // --- Игра: бот угадывает число ---
+    if (numFind[chatId]) {
+        let { l, r, mid } = numFind[chatId];
+        if (data === 'less') {
+            r = mid - 1;
+        } else if (data === 'more') {
+            l = mid + 1;
+        } else if (data === 'equal') {
+            delete numFind[chatId];
+            return bot.sendMessage(chatId, `Ура! Я угадал число: ${mid}`);
+        }
+
+        if (l > r) {
+            delete numFind[chatId];
+            return bot.sendMessage(chatId, `Ты обманул 😡`);
+        }
+
+        mid = Math.floor((l + r) / 2);
+        numFind[chatId] = { l, r, mid };
+        return bot.sendMessage(chatId, `Это ${mid}?`, guessOptions);
+    }
+
+    return bot.sendMessage(chatId, 'Не понял, что ты выбрал 🤔');
+});
+
 
 start()

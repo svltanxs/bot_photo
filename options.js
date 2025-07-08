@@ -17,5 +17,15 @@ module.exports = {
                 
             ]
         })
-    }
+    },
+        guessOptions: {
+    reply_markup: JSON.stringify({
+            inline_keyboard: [
+            [{ text: '>', callback_data: 'more' }],
+            [{ text: '<', callback_data: 'less' }],
+            [{ text: '=', callback_data: 'equal' }]
+            ]
+        })
+    }   
+
 }
