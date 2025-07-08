@@ -31,6 +31,8 @@ const start = () => {
         {command:'/start', description :'Начальное приветьстствие '  },
         {command:'/info', description :'Информация что делаеть бот' },
         {command:'/game', description :'Отгадай число' },
+        {command:'/findNumber', description :'Угадаю число за 10 вопросов' },
+
     
     ])
     
@@ -70,7 +72,7 @@ bot.on('callback_query', async msg => {
         if (data == correct) {
             delete chats[chatId];
             return bot.sendMessage(chatId, `Ты угадал! Это число: ${correct}`, againOptions);
-        } else {
+        } else if (data !== correct && data !== 'more' && data !== 'less' && data !== 'equal') {
             delete chats[chatId];
             return bot.sendMessage(chatId, `ЛОХ, это было число: ${correct}`, againOptions);
         }
