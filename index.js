@@ -2,7 +2,24 @@ const Telegram_Api = require('node-telegram-bot-api')
 
 const token = '7597104065:AAGNUru4VQ1ASJnBeK-g3ryNXBRep1TKioA'
 
-const bot = new Telegram_Api(token, {polling: true})
+const bot = new Telegram_Api(token);
+
+const express = require('express');
+const app = express();
+
+
+app.use(express.json());
+
+app.post(`/bot${token}`, (req, res) => {
+  bot.processUpdate(req.body);
+  res.sendStatus(200);
+});
+app.get('/', (req, res) => res.send('Bot is alive'));
+app.listen(process.env.PORT || 3000, () => {
+  bot.setWebHook(`https://bot-photo-497z.onrender.com/bot${token}`)
+  console.log('Server started and webhook set')
+})
+
 
 const {gameOptions, againOptions , guessOptions} = require('./options') 
 
@@ -10,11 +27,9 @@ const chats = {}
 const numFind = {}
 
 
-const express = require('express');
-const app = express();
 
-app.get('/', (req, res) => res.send('Bot is alive'));
-app.listen(process.env.PORT || 3000);
+
+
 
 
 
