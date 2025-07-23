@@ -21,6 +21,8 @@ app.listen(process.env.PORT || 3000, () => {
 })
 
 
+
+
 const {gameOptions, againOptions , guessOptions} = require('./options') 
 
 const chats = {}
